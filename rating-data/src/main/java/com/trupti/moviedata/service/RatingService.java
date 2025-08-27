@@ -1,9 +1,7 @@
 package com.trupti.moviedata.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import com.trupti.moviedata.dao.MovieEntity;
 import com.trupti.moviedata.model.MovieSummary;
@@ -17,15 +15,12 @@ public class RatingService {
 	private MovieRepo repo;
 	
 	@Autowired
-	private RestTemplate restTemplate;
-	
-	@Value("${api.key}")
-	private String apiKey;
+	private MovieDbService movieDbService;
 	
 	public RatingData fetchRatings(Integer movieId) {
 		System.out.println("***movieId****"+movieId);
 		MovieEntity mEntity = repo.findById(movieId).orElse(new MovieEntity());
-		MovieSummary ms = fetchMovieDetailsFromMovieDB(movieId);
+		MovieSummary ms = movieDbService.fetchMovieDetailsFromMovieDB(movieId);
 		RatingData rd = new RatingData();
 		rd.setMovieId(mEntity.getmId());
 		rd.setName(ms.getTitle());
@@ -35,10 +30,4 @@ public class RatingService {
 		return rd;
 	}
 	
-	private MovieSummary fetchMovieDetailsFromMovieDB(Integer movieId) {
-		MovieSummary movieSum = restTemplate
-				.getForObject("https://api.themoviedb.org/3/movie/" + movieId + "?api_key=" + apiKey, MovieSummary.class);
-		System.out.println("----movieSum----"+movieSum.toString());
-		return movieSum;
-	}
 }

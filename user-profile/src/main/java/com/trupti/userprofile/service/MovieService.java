@@ -1,5 +1,6 @@
 package com.trupti.userprofile.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,7 +18,7 @@ public class MovieService {
 	@Autowired
 	RestTemplate restTemplate;
 
-	//@HystrixCommand(fallbackMethod = "fetchMoviesFallBack")
+	@HystrixCommand(fallbackMethod = "fetchMoviesFallBack")
 	public List<RatingData> fetchMovies(String movieListStr) {
 		System.out.println("****movieListStr****"+movieListStr);
 		List<Integer> movieIdList = Stream.of(movieListStr.split(","))
@@ -30,8 +31,10 @@ public class MovieService {
 		return ratingList;
 	}
 	
-	/*
-	 * public List<RatingData> fetchMoviesFallBack(String movieListStr) { return new
-	 * ArrayList<RatingData>(); }
-	 */
+	
+	  public List<RatingData> fetchMoviesFallBack(String movieListStr)
+	  { 
+		  return new ArrayList<RatingData>(); 
+	  }
+	 
 }

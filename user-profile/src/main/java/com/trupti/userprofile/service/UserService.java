@@ -27,6 +27,7 @@ public class UserService {
 		res.setUserId(uEntity.getuId());
 		res.setUserName(uEntity.getuName());
 		res.setMovies(mService.fetchMovies(uEntity.getMovieList()));
+		System.out.println("---res.getUserName()----"+res.getUserName());
 		return res;
 	}
 
